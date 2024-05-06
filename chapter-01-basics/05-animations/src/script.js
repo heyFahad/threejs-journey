@@ -34,25 +34,38 @@ renderer.setSize(sizes.width, sizes.height);
  * We repeat this process multiple times to create an animation.
  */
 
-// Store the current time to later use it to calculate the deltaTime
-let time = Date.now();
+// // Store the current time to later use it to calculate the deltaTime
+// let time = Date.now();
+
+// Use the built-in Three.js Clock to handle the time calculations instead of doing it manually.
+const clock = new THREE.Clock();
 
 /**
  * Create a function named tick and call this function once.
  * In this function, use window.requestAnimationFrame(...) to call this same function on the next frame:
  */
 const tick = () => {
-    /**
-     * Creating an animation using requestAnimationFrame will result in different result in different screens having different refresh rates (60Hz vs 165Hz).
-     * To overcome this problem, we use the time difference between the current frame’s time and the time of previous frame,
-     * and then doing the transformation based on this deltaTime.
-     */
-    const currentTime = Date.now();
-    const deltaTime = currentTime - time;
-    time = currentTime;
+    // /**
+    //  * Creating an animation using requestAnimationFrame will result in different result in different screens having different refresh rates (60Hz vs 165Hz).
+    //  * To overcome this problem, we use the time difference between the current frame’s time and the time of previous frame,
+    //  * and then doing the transformation based on this deltaTime.
+    //  */
+    // const currentTime = Date.now();
+    // const deltaTime = currentTime - time;
+    // time = currentTime;
 
-    // Update objects
-    mesh.rotation.y += 0.001 * deltaTime;
+    // // Update objects
+    // mesh.rotation.y += 0.001 * deltaTime;
+
+    // Clock
+    const elapsedTime = clock.getElapsedTime();
+    // mesh.rotation.y = elapsedTime;
+    // OR, to rotate the cube a full rotation every 1 second
+    mesh.rotation.y = elapsedTime * Math.PI * 2;
+
+    // Move the cube in a clockwise circle using the simple trigonometry functions
+    mesh.position.x = Math.sin(elapsedTime);
+    mesh.position.y = Math.cos(elapsedTime);
 
     // Render the Three.js scene
     renderer.render(scene, camera);
