@@ -23,6 +23,15 @@ mesh.position.z = 1; // positive value moves towards the camera, negative moves 
 // Or all at once in all 3 dimensions (both have same effect)
 mesh.position.set(0.7, -0.6, 1);
 
+// Scale - also an instance of Vector3, just like position
+// Scale can also either be set individually in a single dimension
+mesh.scale.x = 2;
+mesh.scale.y = 0.5;
+mesh.scale.z = 0.5;
+
+// Or scale in all three dimensions at once (both will have same effect)
+mesh.scale.set(2, 0.5, 0.5);
+
 /**
  * Axes Helper:
  * Positioning things in space can be a real challenge. To help us with that, Three.js provides us with an AxesHelper.
