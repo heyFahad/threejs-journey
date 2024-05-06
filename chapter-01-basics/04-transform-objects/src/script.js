@@ -24,6 +24,15 @@ mesh.position.z = 1; // positive value moves towards the camera, negative moves 
 mesh.position.set(0.7, -0.6, 1);
 
 /**
+ * Axes Helper:
+ * Positioning things in space can be a real challenge. To help us with that, Three.js provides us with an AxesHelper.
+ * The AxesHelper will display 3 lines corresponding to the x, y and z axes, each one starting at the center of the scene and going in the corresponding direction.
+ * The green line corresponds to the y-axis, red line corresponds to the x-axis, and there is a blue line corresponding to the z-axis on this AxesHelper.
+ */
+const axes = new THREE.AxesHelper();
+scene.add(axes);
+
+/**
  * Sizes
  */
 const sizes = {
