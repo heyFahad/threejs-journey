@@ -33,6 +33,22 @@ mesh.scale.z = 0.5;
 mesh.scale.set(2, 0.5, 0.5);
 
 /**
+ * Rotation - there are 2 ways to perform the rotation in space; by using the object.rotation property or object.quaternion property. Updating 1 property will automatically update the other property.
+ *
+ * Rotation using object.rotation property:
+ * when we change the x, y, and z properties, it is like if we put a stick through the object’s center in the particular axis’s direction,
+ * and then rotating the object on that stick by the given radian angle.
+ */
+mesh.rotation.reorder('YXZ'); // One thing to be careful about is the Gimbal Lock situation. Gimbal is a system of suspended rotatable rings, and is most identifiable in gyroscopes. To fix the gimbal lock, we use rotation.reorder(‘YXZ') before applying any rotation.
+mesh.rotation.x = Math.PI * 0.25; // Another thing to remember is that the angles given to rotation must be in radians, and not in degrees.
+mesh.rotation.y = Math.PI * 0.25;
+
+/**
+ * Due to the axis-order problems in the Euler (rotation) like the gimbal lock problem, many 3D softwares use quaternion for rotations
+ * Quaternion also represents an object’s rotation but in a more Mathematical way, but it’s hard to imagine (as compared to an Euler rotation which can be represented in a 3D space)
+ */
+
+/**
  * Axes Helper:
  * Positioning things in space can be a real challenge. To help us with that, Three.js provides us with an AxesHelper.
  * The AxesHelper will display 3 lines corresponding to the x, y and z axes, each one starting at the center of the scene and going in the corresponding direction.
