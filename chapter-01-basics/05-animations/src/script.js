@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import gsap from 'gsap';
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl');
@@ -37,8 +38,18 @@ renderer.setSize(sizes.width, sizes.height);
 // // Store the current time to later use it to calculate the deltaTime
 // let time = Date.now();
 
-// Use the built-in Three.js Clock to handle the time calculations instead of doing it manually.
-const clock = new THREE.Clock();
+// // Use the built-in Three.js Clock to handle the time calculations instead of doing it manually.
+// const clock = new THREE.Clock();
+
+/**
+ * if we want to have more control over the animation like:
+ * - creating complex tweens (a transition from A to B),
+ * - have control on the timing function,
+ * - create timelines (composed of tweens and delays), etc.
+ * then it’s better to use a library like gsap
+ */
+gsap.to(mesh.position, { duration: 1, delay: 1, x: 2 });
+gsap.to(mesh.position, { duration: 1, delay: 2, x: 0 });
 
 /**
  * Create a function named tick and call this function once.
@@ -57,15 +68,15 @@ const tick = () => {
     // // Update objects
     // mesh.rotation.y += 0.001 * deltaTime;
 
-    // Clock
-    const elapsedTime = clock.getElapsedTime();
-    // mesh.rotation.y = elapsedTime;
-    // OR, to rotate the cube a full rotation every 1 second
-    mesh.rotation.y = elapsedTime * Math.PI * 2;
+    // // Clock
+    // const elapsedTime = clock.getElapsedTime();
+    // // mesh.rotation.y = elapsedTime;
+    // // OR, to rotate the cube a full rotation every 1 second
+    // mesh.rotation.y = elapsedTime * Math.PI * 2;
 
-    // Move the cube in a clockwise circle using the simple trigonometry functions
-    mesh.position.x = Math.sin(elapsedTime);
-    mesh.position.y = Math.cos(elapsedTime);
+    // // Move the cube in a clockwise circle using the simple trigonometry functions
+    // mesh.position.x = Math.sin(elapsedTime);
+    // mesh.position.y = Math.cos(elapsedTime);
 
     // Render the Three.js scene
     renderer.render(scene, camera);
@@ -73,6 +84,10 @@ const tick = () => {
     /**
      * Call tick again on the next frame.
      * The purpose of requestAnimationFrame is to call the passed function ONLY ONCE ON THE NEXT FRAME.
+     *
+     * NOTE:
+     * GSAP has a built-in requestAnimationFrame, so you don't need to update the animation by yourself,
+     * but still, if you want to see the cube moving, you need to keep doing the renders of your scene on each frame.
      */
     window.requestAnimationFrame(tick);
 };
