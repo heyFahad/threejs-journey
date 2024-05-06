@@ -7,6 +7,15 @@ const canvas = document.querySelector('canvas.webgl');
 const scene = new THREE.Scene();
 
 /**
+ * Axes Helper:
+ * Positioning things in space can be a real challenge. To help us with that, Three.js provides us with an AxesHelper.
+ * The AxesHelper will display 3 lines corresponding to the x, y and z axes, each one starting at the center of the scene and going in the corresponding direction.
+ * The green line corresponds to the y-axis, red line corresponds to the x-axis, and there is a blue line corresponding to the z-axis on this AxesHelper.
+ */
+const axes = new THREE.AxesHelper();
+scene.add(axes);
+
+/**
  * Objects
  */
 const geometry = new THREE.BoxGeometry(1, 1, 1);
@@ -49,13 +58,28 @@ mesh.rotation.y = Math.PI * 0.25;
  */
 
 /**
- * Axes Helper:
- * Positioning things in space can be a real challenge. To help us with that, Three.js provides us with an AxesHelper.
- * The AxesHelper will display 3 lines corresponding to the x, y and z axes, each one starting at the center of the scene and going in the corresponding direction.
- * The green line corresponds to the y-axis, red line corresponds to the x-axis, and there is a blue line corresponding to the z-axis on this AxesHelper.
+ * Groups
  */
-const axes = new THREE.AxesHelper();
-scene.add(axes);
+const group = new THREE.Group();
+scene.add(group);
+
+const cube1 = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial({ color: 0xff0000 }));
+group.add(cube1);
+
+const cube2 = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial({ color: 0x00ff00 }));
+cube2.position.x = -2;
+group.add(cube2);
+
+const cube3 = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial({ color: 0x0000ff }));
+cube3.position.x = 2;
+group.add(cube3);
+
+/**
+ * Group transformations
+ */
+group.position.y = 1;
+group.scale.y = 2;
+group.rotation.y = 1;
 
 /**
  * Sizes
