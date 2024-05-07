@@ -91,8 +91,25 @@ const tick = () => {
      * Let's update the camera position to follow the cursor on every frame (multiplying the cursor position by 10 to have a better view),
      * and also make it look at the mesh so that we can see the object from all the sides because of camera's perspective.
      */
-    camera.position.x = cursor.x * 10;
-    camera.position.y = cursor.y * 10;
+    // camera.position.x = cursor.x * 10;
+    // camera.position.y = cursor.y * 10;
+
+    /**
+     * UPDATE:
+     * Let's change our code a little bit to make the camera rotate in a complete circle around the object, not just follow the cursor to only view the sides of the object. We can do this by using Math.sin and Math.cos functions.
+     * `sin` and `cos`, when combined and used with the same angle, enable us to place things on a circle.
+     *
+     * REMEMBER:
+     * We need to use the SAME ANGLE for both `sin` and `cos` to place the camera on a circle. For this, we can use either cursor.x or cursor.y to find the exact location of camera around the object (in a circle).
+     * To revolve the camera horizontally around the object, we can use the x-axis and the z-axis to form an orbit around the object, and use the cursor.x value as the angle.
+     */
+    camera.position.x = Math.sin(cursor.x * Math.PI * 2) * 3;
+    camera.position.z = Math.cos(cursor.x * Math.PI * 2) * 3;
+
+    // that was revolving the camera horizontally around the object. To view the upper and lower sides of the object, we still need to update the y-axis of the camera position as we move our cursor vertically.
+    camera.position.y = cursor.y * 5;
+
+    // finally, make the camera look at the object whenever its position changes
     camera.lookAt(mesh.position);
 
     // Render
