@@ -19,7 +19,28 @@ const scene = new THREE.Scene();
 const mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1, 5, 5, 5), new THREE.MeshBasicMaterial({ color: 0xff0000 }));
 scene.add(mesh);
 
-// Camera
+/**
+ * Camera: OrthographicCamera
+ * Differs from the PerspectiveCamera by its lack of perspective.
+ * This means that objects will appear the same size regardless of their distance from the camera.
+ * This projection mode is often used for technical applications, such as CAD software or architectural visualizations.
+ * It can also be used for 2D games or simulations.
+ *
+ * Parameters:
+ * Instead of a field of view, we provide how far the camera can see in each direction (left, right, top, bottom). Then, we provide the near and far clipping planes.
+ * 1. Left: The position of the left plane.
+ * 2. Right: The position of the right plane.
+ * 3. Top: The position of the top plane.
+ * 4. Bottom: The position of the bottom plane.
+ * 5. Near clipping plane: The closest distance that the camera can see.
+ * 6. Far clipping plane: The farthest distance that the camera can see.
+ *
+ * If we use the same values for left, right, top, and bottom (like -1, 1, 1, and -1 respectively), we get a square camera frustum. And this square frustum will be stretched to the aspect ratio of the canvas, if our canvas is not square.
+ * To fix this, we need to use the aspect ratio of the canvas to calculate the correct values for left and right planes of the camera.
+ */
+const aspectRatio = sizes.width / sizes.height;
+const camera = new THREE.OrthographicCamera(-1 * aspectRatio, 1 * aspectRatio, 1, -1, 0.1, 100);
+
 /**
  * Camera: PerspectiveCamera
  * The most common projection mode used for rendering a 3D scene.
@@ -31,7 +52,8 @@ scene.add(mesh);
  * 3. Near clipping plane: The closest distance that the camera can see.
  * 4. Far clipping plane: The farthest distance that the camera can see. We can keep this value reasonably low to improve performance by not rendering objects that are too far away from the camera.
  */
-const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100);
+// const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100);
+
 camera.position.x = 2;
 camera.position.y = 2;
 camera.position.z = 2;
