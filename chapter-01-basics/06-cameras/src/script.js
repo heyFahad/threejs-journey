@@ -1,6 +1,22 @@
 import * as THREE from 'three';
 
 /**
+ * Cursor position:
+ * Let's maintain a map of the cursor position in the normalized device coordinates (NDC).
+ */
+const cursor = {
+    x: 0,
+    y: 0,
+};
+
+// Update the cursor position when the mouse moves
+window.addEventListener('mousemove', (event) => {
+    // Normalized device coordinates (NDC)
+    cursor.x = event.clientX / sizes.width - 0.5;
+    cursor.y = -(event.clientY / sizes.height - 0.5);
+});
+
+/**
  * Base
  */
 // Canvas
@@ -38,8 +54,8 @@ scene.add(mesh);
  * If we use the same values for left, right, top, and bottom (like -1, 1, 1, and -1 respectively), we get a square camera frustum. And this square frustum will be stretched to the aspect ratio of the canvas, if our canvas is not square.
  * To fix this, we need to use the aspect ratio of the canvas to calculate the correct values for left and right planes of the camera.
  */
-const aspectRatio = sizes.width / sizes.height;
-const camera = new THREE.OrthographicCamera(-1 * aspectRatio, 1 * aspectRatio, 1, -1, 0.1, 100);
+// const aspectRatio = sizes.width / sizes.height;
+// const camera = new THREE.OrthographicCamera(-1 * aspectRatio, 1 * aspectRatio, 1, -1, 0.1, 100);
 
 /**
  * Camera: PerspectiveCamera
@@ -52,11 +68,11 @@ const camera = new THREE.OrthographicCamera(-1 * aspectRatio, 1 * aspectRatio, 1
  * 3. Near clipping plane: The closest distance that the camera can see.
  * 4. Far clipping plane: The farthest distance that the camera can see. We can keep this value reasonably low to improve performance by not rendering objects that are too far away from the camera.
  */
-// const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100);
+const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100);
 
-camera.position.x = 2;
-camera.position.y = 2;
-camera.position.z = 2;
+// camera.position.x = 2;
+// camera.position.y = 2;
+camera.position.z = 3;
 camera.lookAt(mesh.position);
 scene.add(camera);
 
@@ -70,10 +86,14 @@ renderer.setSize(sizes.width, sizes.height);
 const clock = new THREE.Clock();
 
 const tick = () => {
-    const elapsedTime = clock.getElapsedTime();
-
-    // Update objects
-    mesh.rotation.y = elapsedTime;
+    /**
+     * Update camera:
+     * Let's update the camera position to follow the cursor on every frame (multiplying the cursor position by 10 to have a better view),
+     * and also make it look at the mesh so that we can see the object from all the sides because of camera's perspective.
+     */
+    camera.position.x = cursor.x * 10;
+    camera.position.y = cursor.y * 10;
+    camera.lookAt(mesh.position);
 
     // Render
     renderer.render(scene, camera);
