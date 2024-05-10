@@ -27,6 +27,22 @@ const sizes = {
 };
 
 /**
+ * To handle resizing of the canvas when the window is resized, we need to add an event listener to the window object.
+ */
+window.addEventListener('resize', () => {
+    // update the sizes map whenever the window is resized
+    sizes.width = window.innerWidth;
+    sizes.height = window.innerHeight;
+
+    // Also, update the camera aspect ratio to match the new window size
+    camera.aspect = sizes.width / sizes.height;
+    camera.updateProjectionMatrix(); // this line is important to update the camera's aspect ratio. otherwise, we won't see the changes in the viewport
+
+    // Finally, update the renderer's size to match the new window size
+    renderer.setSize(sizes.width, sizes.height);
+});
+
+/**
  * Camera
  */
 // Base camera
