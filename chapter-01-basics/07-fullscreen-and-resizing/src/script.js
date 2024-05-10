@@ -22,8 +22,8 @@ scene.add(mesh);
  * Sizes
  */
 const sizes = {
-    width: 800,
-    height: 600,
+    width: window.innerWidth,
+    height: window.innerHeight,
 };
 
 /**
@@ -37,6 +37,7 @@ scene.add(camera);
 // Controls
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
+// controls.enabled = false; // for testing out the viewport sizing of the canvas
 
 /**
  * Renderer
