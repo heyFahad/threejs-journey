@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import gsap from 'gsap';
 import GUI from 'lil-gui';
 
 /**
@@ -47,6 +48,15 @@ gui.add(material, 'wireframe').name('Wireframe');
 gui.addColor(debugObject, 'color').onChange(() => {
     material.color.set(debugObject.color);
 });
+
+/**
+ * Adding a function/button in the Debug UI to perform an action
+ * Lil-gui will automatically detect that the property is a function and create a button control
+ */
+debugObject.spin = () => {
+    gsap.to(mesh.rotation, { y: mesh.rotation.y + Math.PI * 2, duration: 1 });
+};
+gui.add(debugObject, 'spin').name('Spin');
 
 /**
  * Sizes
