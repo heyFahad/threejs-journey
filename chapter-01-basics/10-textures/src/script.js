@@ -14,16 +14,52 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 // image.src = '/textures/door/color.jpg';
 
+/**
+ * We can also create a `LoadingManager` to handle the loading of multiple textures, and keeping track of their loading progress.
+ */
+const loadingManager = new THREE.LoadingManager(); // we'll pass this loading manager to the TextureLoader constructor when creating a new instance of it.
+
+// before loading a texture, we can add some event listeners to our loading manager to keep track of the loading progress:
+loadingManager.onStart = () => {
+    console.log('loading started');
+};
+
+loadingManager.onLoad = () => {
+    console.log('loading finished');
+};
+
+loadingManager.onProgress = () => {
+    console.log('loading in progress');
+};
+
+loadingManager.onError = () => {
+    console.log('loading error');
+};
+
 // the preferred way to load textures is to use the TextureLoader class:
-const textureLoader = new THREE.TextureLoader();
-const texture = textureLoader.load('/textures/door/color.jpg');
+const textureLoader = new THREE.TextureLoader(loadingManager);
+const colorTexture = textureLoader.load('/textures/door/color.jpg');
 
 /**
  * Textures used as `map` and `matcap` are supposed to be encoded in sRGB.
  *
  * In the latest versions of Three.js we need to specify it by setting their colorSpace to THREE.SRGBColorSpace:
  */
-texture.colorSpace = THREE.SRGBColorSpace;
+colorTexture.colorSpace = THREE.SRGBColorSpace;
+
+/**
+ * An example to show how to load multiple textures and keep track of their loading progress.
+ * After these 6 lines added, we'll receive
+ * - 1 event for `onStart`
+ * - 7 events for `onProgress` (1 for colorTexture and the rest of 6 for the following lines)
+ * - and 1 event for `onLoad`.
+ */
+textureLoader.load('/textures/door/alpha.jpg');
+textureLoader.load('/textures/door/height.jpg');
+textureLoader.load('/textures/door/normal.jpg');
+textureLoader.load('/textures/door/ambientOcclusion.jpg');
+textureLoader.load('/textures/door/metalness.jpg');
+textureLoader.load('/textures/door/roughness.jpg');
 
 /**
  * Base
@@ -38,7 +74,7 @@ const scene = new THREE.Scene();
  * Object
  */
 const geometry = new THREE.BoxGeometry(1, 1, 1);
-const material = new THREE.MeshBasicMaterial({ map: texture });
+const material = new THREE.MeshBasicMaterial({ map: colorTexture });
 const mesh = new THREE.Mesh(geometry, material);
 scene.add(mesh);
 
