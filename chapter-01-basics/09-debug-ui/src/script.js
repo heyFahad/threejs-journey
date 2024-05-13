@@ -30,6 +30,13 @@ scene.add(mesh);
 gui.add(mesh.position, 'y').min(-3).max(3).step(0.01).name('Elevation');
 
 /**
+ * Add some checkbox controls in the Debug UI
+ * GUI automatically detects the type of the property and creates the appropriate control
+ */
+gui.add(mesh, 'visible').name('Show');
+gui.add(material, 'wireframe').name('Wireframe');
+
+/**
  * Sizes
  */
 const sizes = {
