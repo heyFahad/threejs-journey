@@ -2,6 +2,30 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 /**
+ * Textures
+ * We can either load the textures manually by creating an Image object and setting its src property, or use the TextureLoader class.
+ */
+// const image = new Image();
+// const texture = new THREE.Texture(image);
+
+// image.onload = () => {
+//     texture.needsUpdate = true;
+// };
+
+// image.src = '/textures/door/color.jpg';
+
+// the preferred way to load textures is to use the TextureLoader class:
+const textureLoader = new THREE.TextureLoader();
+const texture = textureLoader.load('/textures/door/color.jpg');
+
+/**
+ * Textures used as `map` and `matcap` are supposed to be encoded in sRGB.
+ *
+ * In the latest versions of Three.js we need to specify it by setting their colorSpace to THREE.SRGBColorSpace:
+ */
+texture.colorSpace = THREE.SRGBColorSpace;
+
+/**
  * Base
  */
 // Canvas
@@ -14,7 +38,7 @@ const scene = new THREE.Scene();
  * Object
  */
 const geometry = new THREE.BoxGeometry(1, 1, 1);
-const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+const material = new THREE.MeshBasicMaterial({ map: texture });
 const mesh = new THREE.Mesh(geometry, material);
 scene.add(mesh);
 
