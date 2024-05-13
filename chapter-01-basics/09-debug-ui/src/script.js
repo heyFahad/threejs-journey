@@ -6,6 +6,7 @@ import GUI from 'lil-gui';
  * Add the Debug UI with the lil-gui library
  */
 const gui = new GUI();
+const debugObject = {};
 
 /**
  * Base
@@ -19,8 +20,9 @@ const scene = new THREE.Scene();
 /**
  * Object
  */
+debugObject.color = '#a778d8';
 const geometry = new THREE.BoxGeometry(1, 1, 1, 2, 2, 2);
-const material = new THREE.MeshBasicMaterial({ color: '#ff0000' });
+const material = new THREE.MeshBasicMaterial({ color: debugObject.color });
 const mesh = new THREE.Mesh(geometry, material);
 scene.add(mesh);
 
@@ -35,6 +37,16 @@ gui.add(mesh.position, 'y').min(-3).max(3).step(0.01).name('Elevation');
  */
 gui.add(mesh, 'visible').name('Show');
 gui.add(material, 'wireframe').name('Wireframe');
+
+/**
+ * Adding a color tweak control in the Debug UI is a bit more complex because Three.js applies some color management in order to optimize the rendering
+ * If we change the color of the material directly, it won't work as expected
+ * We need to put the color outside of Three.js world (in our own debugObject), and add the debug control on this external color
+ * Then, we need to listen to the color change and update the material color accordingly
+ */
+gui.addColor(debugObject, 'color').onChange(() => {
+    material.color.set(debugObject.color);
+});
 
 /**
  * Sizes
