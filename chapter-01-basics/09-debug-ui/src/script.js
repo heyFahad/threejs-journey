@@ -10,6 +10,12 @@ const gui = new GUI();
 const debugObject = {};
 
 /**
+ * We can also add different folders in the Debug UI to organize the controls better
+ */
+const cubeTweaks = gui.addFolder('Awesome cube');
+// cubeTweaks.close(); // we can close the folder by default
+
+/**
  * Base
  */
 // Canvas
@@ -30,14 +36,14 @@ scene.add(mesh);
 /**
  * Enable debug controls for the mesh (elevation) position by adding a GUI slider
  */
-gui.add(mesh.position, 'y').min(-3).max(3).step(0.01).name('Elevation');
+cubeTweaks.add(mesh.position, 'y').min(-3).max(3).step(0.01).name('Elevation');
 
 /**
  * Add some checkbox controls in the Debug UI
  * GUI automatically detects the type of the property and creates the appropriate control
  */
-gui.add(mesh, 'visible').name('Show');
-gui.add(material, 'wireframe').name('Wireframe');
+cubeTweaks.add(mesh, 'visible').name('Show');
+cubeTweaks.add(material, 'wireframe').name('Wireframe');
 
 /**
  * Adding a color tweak control in the Debug UI is a bit more complex because Three.js applies some color management in order to optimize the rendering
@@ -45,7 +51,7 @@ gui.add(material, 'wireframe').name('Wireframe');
  * We need to put the color outside of Three.js world (in our own debugObject), and add the debug control on this external color
  * Then, we need to listen to the color change and update the material color accordingly
  */
-gui.addColor(debugObject, 'color').onChange(() => {
+cubeTweaks.addColor(debugObject, 'color').onChange(() => {
     material.color.set(debugObject.color);
 });
 
@@ -56,18 +62,19 @@ gui.addColor(debugObject, 'color').onChange(() => {
 debugObject.spin = () => {
     gsap.to(mesh.rotation, { y: mesh.rotation.y + Math.PI * 2, duration: 1 });
 };
-gui.add(debugObject, 'spin').name('Spin');
+cubeTweaks.add(debugObject, 'spin').name('Spin');
 
 /**
  * Tweaking the geometry
  * We cannot directly add a GUI control to the geometry because it's not a property of the geometry object
  * We need to create a new object with the properties we want to tweak and then add it to the GUI
  */
-// gui.add(geometry, 'width').min(0).max(2).step(0.01).name('Width'); // this will throw an error
+// cubeTweaks.add(geometry, 'width').min(0).max(2).step(0.01).name('Width'); // this will throw an error
 debugObject.geometry = {
     subdivision: geometry.parameters.widthSegments,
 };
-gui.add(debugObject.geometry, 'subdivision')
+cubeTweaks
+    .add(debugObject.geometry, 'subdivision')
     .min(1)
     .max(20)
     .step(1)
