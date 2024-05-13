@@ -23,7 +23,7 @@ const scene = new THREE.Scene();
  */
 debugObject.color = '#a778d8';
 const geometry = new THREE.BoxGeometry(1, 1, 1, 2, 2, 2);
-const material = new THREE.MeshBasicMaterial({ color: debugObject.color });
+const material = new THREE.MeshBasicMaterial({ color: debugObject.color, wireframe: true });
 const mesh = new THREE.Mesh(geometry, material);
 scene.add(mesh);
 
@@ -57,6 +57,33 @@ debugObject.spin = () => {
     gsap.to(mesh.rotation, { y: mesh.rotation.y + Math.PI * 2, duration: 1 });
 };
 gui.add(debugObject, 'spin').name('Spin');
+
+/**
+ * Tweaking the geometry
+ * We cannot directly add a GUI control to the geometry because it's not a property of the geometry object
+ * We need to create a new object with the properties we want to tweak and then add it to the GUI
+ */
+// gui.add(geometry, 'width').min(0).max(2).step(0.01).name('Width'); // this will throw an error
+debugObject.geometry = {
+    subdivision: geometry.parameters.widthSegments,
+};
+gui.add(debugObject.geometry, 'subdivision')
+    .min(1)
+    .max(20)
+    .step(1)
+    .name('Segments')
+    // a better way to update the geometry is to listen to the onFinishChange event
+    .onChange(() => {
+        mesh.geometry.dispose();
+        mesh.geometry = new THREE.BoxGeometry(
+            geometry.parameters.width,
+            geometry.parameters.height,
+            geometry.parameters.depth,
+            debugObject.geometry.subdivision,
+            debugObject.geometry.subdivision,
+            debugObject.geometry.subdivision
+        );
+    });
 
 /**
  * Sizes
